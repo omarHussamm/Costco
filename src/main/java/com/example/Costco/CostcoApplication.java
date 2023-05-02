@@ -13,10 +13,4 @@ public class CostcoApplication {
 		SpringApplication.run(CostcoApplication.class, args);
 	}
 
-	@GetMapping
-	public String hello(){
-		System.out.println("hi");
-		return "Disha";
-	}
-
 }
