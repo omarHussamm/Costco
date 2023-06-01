@@ -3,10 +3,7 @@ package com.example.Costco;
 import com.example.Costco.services.RabbitMQPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class orderController {
         this.orderService = orderService;
         this.producer = producer;
     }
-    @GetMapping("/")
+    @GetMapping("/getOrder")
     public List<Order> getOrder(){
         return orderService.getOrder();
     }
@@ -32,4 +29,14 @@ public class orderController {
         System.out.println("message is "+message);
         return ResponseEntity.ok("Message sent to RabbitMQ ...");
     }
+    // search for product
+    @PostMapping
+    public void addToCart(Product product){
+        orderService.addToCart(product);
+    }
+    @DeleteMapping
+    public void removeFromCart(Product product){
+        orderService.removeFromCart(product);
+    }
+    // submit order > user app authentication > remove products from database products > transaction
 }
