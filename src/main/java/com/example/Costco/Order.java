@@ -1,17 +1,31 @@
 package com.example.Costco;
 
 
-import java.util.List;
+import jakarta.persistence.*;
 
+import java.util.List;
+@Entity
+@Table(name = "orders")
 public class Order {
+	@Id
+	@SequenceGenerator(
+			name = "order_sequence",
+			sequenceName = "order_sequence",
+			allocationSize = 1
+	)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE,
+			generator = "order_sequence"
+	)
 	private long id;
 	private long user_id;
 	//order items like
-	private List<Product> products;
+//	private List<Product> products;
+	private List<String> products;
 	private String status;
 	private boolean paid;
 
-	public Order(int id, int userId, List<Product> products, String status, boolean paid) {
+	public Order(int id, int userId ,List<String> products, String status, boolean paid) {
 		this.id = id;
 		this.user_id = userId;
 		this.products = products;
@@ -27,7 +41,7 @@ public class Order {
 		return user_id;
 	}
 
-	public List<Product> getProducts() {
+	public List<String> getProducts() {
 		return products;
 	}
 
@@ -35,9 +49,9 @@ public class Order {
 		return status;
 	}
 
-	public double getTotal() {
-		return products.stream().mapToDouble(Product::getPrice).sum();
-	}
+//	public double getTotal() {
+//		return products.stream().mapToDouble(Product::getPrice).sum();
+//	}
 
 	public void updateOrderStatus(Order order, String event) {
 		String currentStatus = order.getStatus();
