@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -19,24 +21,26 @@ public class orderController {
         this.orderService = orderService;
         this.producer = producer;
     }
-//    @GetMapping("/getOrder")
-//    public List<Order> getOrder(){
-//        return orderService.getOrder();
+    @GetMapping("getOrder/{id}")
+    public Object getOrder(@PathVariable("id") int id){
+        return orderService.getOrder(id);
+    }
+
+//    @PostMapping("addOrder")
+//    public void addOrder(@RequestBody() Order order){
+//        String userId = order.getUser_id();
+//        String status = order.getStatus();
+//        boolean paid = order.isPaid();
+//        orderService.addOrder(userId, status, paid);
 //    }
-//    @GetMapping("/try")
-//    public ResponseEntity<String> sendMessageFromOrderToUser(@RequestParam("message") String message){
-//        producer.sendOrderProductMessage(message);
-//        System.out.println("message is "+message);
-//        return ResponseEntity.ok("Message sent to RabbitMQ ...");
+//    @PutMapping("updateOrder/{id}/{newStatus}")
+//    public void updateOrder(@PathVariable("id") int id,@PathVariable("newStatus") String newStatus)
+//    {
+//        orderService.updateOrder(id, newStatus);
 //    }
-    // search for product
-//    @PostMapping
-//    public void addToCart(Product product){
-//        orderService.addToCart(product);
-//    }
-//    @DeleteMapping
-//    public void removeFromCart(Product product){
-//        orderService.removeFromCart(product);
-//    }
-    // submit order > user app authentication > remove products from database products > transaction
+    @DeleteMapping("deleteOrder/{id}")
+    public void deleteOrder(@PathVariable("id") int id)
+    {
+        orderService.deleteOrder(id);
+    }
 }

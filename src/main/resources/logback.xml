@@ -1,0 +1,70 @@
+<configuration scan="true">
+    <property name="LOGDIRECTORY" value="./logs" />
+
+    <springProperty scope="context" name="splunk.url" source="splunk.url"/>
+    <springProperty scope="context" name="splunk.token" source="splunk.token"/>
+    <springProperty scope="context" name="splunk.index" source="splunk.index"/>
+    <springProperty scope="context" name="splunk.source" source="splunk.source"/>
+    <springProperty scope="context" name="splunk.sourcetype" source="splunk.sourcetype"/>
+    <springProperty scope="context" name="splunk.disableCertificateValidation" source="splunk.disableCertificateValidation"/>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+<!--                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C): %msg%n%throwable-->
+                %d{ISO8601} %green([%thread]) %highlight(%level) %yellow(%C): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="Splunk" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+        <url>${splunk.url}</url>
+        <token>${splunk.token}</token>
+        <index>${splunk.index}</index>
+        <source>${splunk.source}</source>
+        <sourcetype>${splunk.sourcetype}</sourcetype>
+        <disableCertificateValidation>${splunk.disableCertificateValidation}</disableCertificateValidation>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%msg</pattern>
+        </layout>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGDIRECTORY}/microservice.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C [%t] %m%n</Pattern>
+        </encoder>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGDIRECTORY}/archived/microservice-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+        <appender-ref ref="Splunk" />
+    </root>
+
+    <root level="error">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+        <appender-ref ref="Splunk" />
+    </root>
+
+    <root level="info">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+        <appender-ref ref="Splunk" />
+    </root>
+</configuration>

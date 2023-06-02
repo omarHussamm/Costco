@@ -4,40 +4,58 @@ package com.example.Costco;
 import jakarta.persistence.*;
 
 import java.util.List;
-@Entity
-@Table(name = "orders")
+@Entity(name = "orders")
 public class Order {
 	@Id
-	@SequenceGenerator(
-			name = "order_sequence",
-			sequenceName = "order_sequence",
-			allocationSize = 1
-	)
+//	@SequenceGenerator(
+//			name = "order_sequence",
+//			sequenceName = "order_sequence",
+//			allocationSize = 1
+//	)
 	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "order_sequence"
+			strategy = GenerationType.IDENTITY
+//			generator = "order_sequence"
 	)
-	private long id;
-	private long user_id;
-	//order items like
-//	private List<Product> products;
+	private int id;
+	@Column
+	private String user_id;
+	@Column(nullable = true)
 	private List<String> products;
+	@Column
 	private String status;
+	@Column
 	private boolean paid;
+	@Column
+	private String totalAmount;
 
-	public Order(int id, int userId ,List<String> products, String status, boolean paid) {
-		this.id = id;
-		this.user_id = userId;
-		this.products = products;
-		this.status = status;
-		this.paid = paid;
-	}
+//	public Order() {
+//	}
 
-	public long getId() {
+//	public Order(int id, int userId , List<String> products, String status, boolean paid) {
+//		this.id = id;
+//		this.user_id = userId;
+//		this.products = products;
+//		this.status = status;
+//		this.paid = paid;
+//	}
+//	public Order(int id, int userId, String status, boolean paid) {
+//		this.id = id;
+//		this.user_id = userId;
+//		this.status = status;
+//		this.paid = paid;
+//	}
+//	public Order(int userId, String status, boolean paid) {
+//		this.user_id = userId;
+//		this.status = status;
+//		this.paid = paid;
+//	}
+
+
+	public int getId() {
 		return id;
 	}
 
-	public long getUserId() {
+	public String getUser_id() {
 		return user_id;
 	}
 
@@ -49,86 +67,17 @@ public class Order {
 		return status;
 	}
 
-//	public double getTotal() {
-//		return products.stream().mapToDouble(Product::getPrice).sum();
-//	}
-
-	public void updateOrderStatus(Order order, String event) {
-		String currentStatus = order.getStatus();
-
-		// Check the current status and the event to determine the new status
-		String newStatus;
-		switch(currentStatus) {
-			case "Pending":
-				if (event.equals("OrderConfirmed")) {
-					newStatus = "Processing";
-				} else {
-					newStatus = currentStatus;
-				}
-				break;
-			case "Processing":
-				if (event.equals("OrderShipped")) {
-					newStatus = "Shipped";
-				} else {
-					newStatus = currentStatus;
-				}
-				break;
-			case "Shipped":
-				if (event.equals("OrderDelivered")) {
-					newStatus = "Delivered";
-				} else {
-					newStatus = currentStatus;
-				}
-				break;
-			default:
-				newStatus = currentStatus;
-		}
-
-		// Update the order status if it has changed
-		if (!newStatus.equals(currentStatus)) {
-			order.setStatus(newStatus);
-		}
-	}
-
-	public void setStatus(String event) {
-		switch (event) {
-			case "OrderConfirmed":
-				this.status = "Processing";
-				break;
-			case "OrderShipped":
-				this.status = "Shipped";
-				break;
-			case "OrderDelivered":
-				this.status = "Delivered";
-				break;
-			case "OrderCanceled":
-				this.status = "Canceled";
-				break;
-			case "OrderRefunded":
-				this.status = "Refunded";
-				break;
-			case "OrderReturned":
-				this.status = "Returned";
-				break;
-			default:
-				// handle invalid event
-				throw new IllegalArgumentException("Invalid event: " + event);
-		}
-	}
-
-	public boolean getpaid() {
+	public boolean isPaid() {
 		return paid;
 	}
 
-	public void setpaid(boolean paid) {
-		this.paid = paid;
+	public String getTotalAmount() {
+		return totalAmount;
 	}
 
-	public void setId(int orderId) {
-		// TODO Auto-generated method stub
-		this.id=orderId;
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
 	}
-
 }
 
 
