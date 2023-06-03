@@ -161,10 +161,11 @@ public class RabbitMQConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("localhost");
+        connectionFactory.setHost("35.180.68.31");
+        connectionFactory.setVirtualHost("cherry_broker");
         connectionFactory.setPort(5672);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        connectionFactory.setUsername("root");
+        connectionFactory.setPassword("root");
         return connectionFactory;
     }
 
